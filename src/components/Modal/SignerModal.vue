@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black text-black bg-opacity-50">
     <div class="bg-white w-full max-w-xl rounded-lg shadow-lg p-6">
-      <h2 class="text-xl font-bold mb-4">Tambah Penandatangan SPT</h2>
+      <h2 class="text-xl font-bold mb-4">Ubah Penandatangan SPT</h2>
       <p class="text-sm text-gray-500 mb-6">* Field wajib diisi</p>
 
       <div>
