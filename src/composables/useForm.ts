@@ -1,4 +1,5 @@
 import { reactive } from "vue";
+import { formatNPWPInput } from "../helper/formatter";
 
 export const useForm = () => {
   const form = reactive({
@@ -26,9 +27,17 @@ export const useForm = () => {
     return !errors.npwp && !errors.name && !errors.statusTaxpayer && !errors.signatory
   }
 
+  const onNPWPInput = (event: any) => {
+    const input = event.target
+    const formatted = formatNPWPInput(input.value)
+    input.value = formatted
+    form.npwp = formatted
+  }
+
   return {
     form,
     errors,
     validateForm,
+    onNPWPInput
   }
 }

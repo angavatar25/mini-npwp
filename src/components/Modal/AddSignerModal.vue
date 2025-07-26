@@ -7,7 +7,13 @@
       <div @submit.prevent="onSubmit">
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">NPWP *</label>
-          <input v-model="form.npwp" type="text" class="w-full border rounded px-3 py-2" required />
+          <input
+            v-model="form.npwp"
+            @input="onNPWPInput"
+            type="text"
+            class="w-full border rounded px-3 py-2"
+            required
+          />
           <p v-if="errors.npwp" class="text-red-500 text-sm">{{ errors.npwp }}</p>
         </div>
 
@@ -77,7 +83,7 @@
 import { defineEmits, defineProps } from 'vue'
 import { useForm } from '../../composables/useForm';
 
-const { form, errors, validateForm } = useForm();
+const { form, errors, validateForm, onNPWPInput } = useForm();
 
 defineProps({
   isAddModalOpen: Boolean,
