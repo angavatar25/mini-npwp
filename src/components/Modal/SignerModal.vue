@@ -12,18 +12,18 @@
 
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Nama Penandatangan SPT *</label>
-          <input v-model="form.nama" type="text" class="w-full border rounded px-3 py-2" required />
+          <input v-model="form.name" type="text" class="w-full border rounded px-3 py-2" required />
         </div>
 
         <div class="mb-4">
           <label class="block text-sm font-medium mb-2">Bertindak sebagai *</label>
           <div class="flex gap-4">
             <label class="flex items-center gap-2">
-              <input v-model="form.sebagai" type="radio" value="Wajib Pajak" required />
+              <input v-model="form.signatory" type="radio" value="TAXPAYER" required />
               Wajib Pajak
             </label>
             <label class="flex items-center gap-2">
-              <input v-model="form.sebagai" type="radio" value="Kuasa" required />
+              <input v-model="form.signatory" type="radio" value="AUTHORIZED_REPRESENTATIVE" required />
               Kuasa
             </label>
           </div>
@@ -33,11 +33,11 @@
           <label class="block text-sm font-medium mb-2">Status Wajib Pajak *</label>
           <div class="flex gap-4">
             <label class="flex items-center gap-2">
-              <input v-model="form.status" type="radio" value="Aktif" required />
+              <input v-model="form.statusTaxpayer" type="radio" value="ACTIVE" required />
               Aktif
             </label>
             <label class="flex items-center gap-2">
-              <input v-model="form.status" type="radio" value="Tidak Aktif" required />
+              <input v-model="form.statusTaxpayer" type="radio" value="NOT_ACTIVE" required />
               Tidak Aktif
             </label>
           </div>
@@ -45,7 +45,7 @@
 
         <div class="mb-6">
           <label class="flex items-center gap-2">
-            <input v-model="form.default" type="checkbox" />
+            <input v-model="form.defaultSignatory" type="checkbox" />
             Jadikan sebagai default
           </label>
         </div>
@@ -60,38 +60,32 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, defineEmits, defineProps, onMounted, computed } from 'vue'
-import { useSigners } from '../../composables/useSigners';
+import { reactive, defineEmits, defineProps, onMounted, computed, watch, ref } from 'vue'
 import { SignersSignatory, SignersStatus } from '../../enum/SignersEnum';
 
-const { signerData } = useSigners();
+interface DataProps {
+  name: string
+  npwp: string
+  statusTaxpayer: string
+  signatory: string
+  defaultSignatory: boolean
+  id: string
+}
 
-const props = defineProps({
-  isOpen: Boolean,
-  data: {
-    type: Object as () => {
-      defaultSignatory: boolean
-      id: string
-      name: string
-      npwp: string
-      signatory: string
-      statusTaxpayer: string
-    },
-    required: true
-  },
-});
+const props = defineProps<{
+  isOpen: boolean
+  data: DataProps
+}>()
 
 const emit = defineEmits(['close', 'save'])
 
-const form = reactive({
+const form = ref({
   npwp: '',
   name: '',
   signatory: '',
   statusTaxpayer: '',
   defaultSignatory: false
 });
-
-const signer = computed(() => signerData);
 
 function close() {
   emit('close')
@@ -102,14 +96,17 @@ function onSubmit() {
   close()
 }
 
-onMounted(() => {
-  console.log(props.data)
-  const { name, npwp, signatory, statusTaxpayer, defaultSignatory } = props.data;
+watch(() => props.data, (newData) => {
+  if (!newData) return
+  
+  const { name, npwp, signatory, statusTaxpayer, defaultSignatory } = newData;
 
-  form.npwp = npwp;
-  form.name = name;
-  form.signator = signatory === SignersSignatory.TAXPAYER ? "Wajib Pajak" : "Kuasa";
-  form.statusTaxpayer = statusTaxpayer === SignersStatus.ACTIVE ? "Aktif" : "Tidak Aktif";
-  form.defaultSignatory = defaultSignatory;
-})
+  console.log(name);
+
+  form.value.npwp = newData.npwp;
+  form.value.name = newData.name;
+  form.value.signatory = signatory;
+  form.value.statusTaxpayer = statusTaxpayer;
+  form.value.defaultSignatory = defaultSignatory;
+}, { immediate: true })
 </script>

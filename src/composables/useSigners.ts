@@ -47,10 +47,9 @@ export function useSigners() {
   const getSignerById = (id: string) => {
     apiFetch(`/signers/${id}`, "GET")
       .then((res) => {
-        if (res) {
-          const { data } = res;
-          signerData.value = data;
-        }
+        const { data } = res;
+        signerData.value = data;
+        handleModal();
       })
   }
 

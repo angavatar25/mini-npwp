@@ -43,7 +43,6 @@ function addSigner(data: any) {
 
 const handleGetSignerById = (id: string) => {
   getSignerById(id);
-  handleModal();
 };
 
 const handleAddNewSigner = (payload: TSigner) => {
