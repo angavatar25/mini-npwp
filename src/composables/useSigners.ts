@@ -73,13 +73,6 @@ export function useSigners() {
       })
   }
 
-  const updateByIdMutate = (array, id, newData) => {
-    const index = array.findIndex(item => item.id === id);
-    if (index !== -1) {
-      array[index] = { ...array[index], ...newData };
-    }
-  }
-
   return {
     signersList,
     isModalOpen,

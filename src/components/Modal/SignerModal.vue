@@ -73,21 +73,13 @@
 import { defineEmits, defineProps, watch } from 'vue'
 import { useForm } from '../../composables/useForm';
 import { npwpNumberOnly } from '../../helper/formatter';
+import { TSigner } from '../../composables/useSigners';
 
 const { form, errors, validateForm, onNPWPInput } = useForm();
 
-interface DataProps {
-  name: string
-  npwp: string
-  statusTaxpayer: string
-  signatory: string
-  defaultSignatory: boolean
-  id: string
-}
-
 const props = defineProps<{
   isOpen: boolean
-  data: DataProps
+  data: TSigner
 }>()
 
 const emit = defineEmits(['close', 'save'])
