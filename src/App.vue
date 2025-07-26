@@ -31,14 +31,16 @@ const {
   createNewSigner,
   handleAddModal,
   getAllSigners,
+  updateSignerData,
   isModalOpen,
   signerData,
   isAddModalOpen,
   signersList,
 } = useSigners();
 
-function addSigner(data: any) {
-  console.log('Saved Data:', data)
+function addSigner(payload: TSigner) {
+  console.log(payload);
+  updateSignerData(payload);
 }
 
 const handleGetSignerById = (id: string) => {

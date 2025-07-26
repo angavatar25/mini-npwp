@@ -7,6 +7,7 @@ export interface TSigner {
   statusTaxpayer: string,
   signatory: string,
   defaultSignatory: boolean,
+  id?: string,
 };
 
 export function useSigners() {
@@ -53,6 +54,32 @@ export function useSigners() {
       })
   }
 
+  const updateSignerData = (payload: TSigner) => {
+    const body = {
+      data: payload
+    };
+
+    const { id: signerId } = signerData.value;
+
+    apiFetch(`/signers/${signerId}`, "PUT", body)
+      .then(() => {
+        const index = signersList.value.findIndex(item => item.id === signerId);
+
+        if (index !== -1) {
+          signersList.value[index] = { ...signersList.value[index], ...payload };
+        }
+
+        isModalOpen.value = false;
+      })
+  }
+
+  const updateByIdMutate = (array, id, newData) => {
+    const index = array.findIndex(item => item.id === id);
+    if (index !== -1) {
+      array[index] = { ...array[index], ...newData };
+    }
+  }
+
   return {
     signersList,
     isModalOpen,
@@ -63,5 +90,6 @@ export function useSigners() {
     handleModal,
     getSignerById,
     handleAddModal,
+    updateSignerData,
   }
 }

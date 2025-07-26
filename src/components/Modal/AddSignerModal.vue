@@ -8,11 +8,13 @@
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">NPWP *</label>
           <input v-model="form.npwp" type="text" class="w-full border rounded px-3 py-2" required />
+          <p v-if="errors.npwp" class="text-red-500 text-sm">{{ errors.npwp }}</p>
         </div>
 
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">Nama Penandatangan SPT *</label>
           <input v-model="form.name" type="text" class="w-full border rounded px-3 py-2" required />
+          <p v-if="errors.name" class="text-red-500 text-sm">{{ errors.name }}</p>
         </div>
 
         <div class="mb-4">
@@ -27,6 +29,7 @@
               Kuasa
             </label>
           </div>
+          <p v-if="errors.statusTaxpayer" class="text-red-500 text-sm">{{ errors.statusTaxpayer }}</p>
         </div>
 
         <div class="mb-4">
@@ -51,6 +54,7 @@
               Tidak Aktif
             </label>
           </div>
+          <p v-if="errors.signatory" class="text-red-500 text-sm">{{ errors.signatory }}</p>
         </div>
 
         <div class="mb-6">
@@ -70,9 +74,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, defineEmits, defineProps, onMounted, computed } from 'vue'
-import { useSigners } from '../../composables/useSigners';
-import { SignersSignatory, SignersStatus } from '../../enum/SignersEnum';
+import { defineEmits, defineProps } from 'vue'
+import { useForm } from '../../composables/useForm';
+
+const { form, errors, validateForm } = useForm();
 
 defineProps({
   isAddModalOpen: Boolean,
@@ -80,19 +85,13 @@ defineProps({
 
 const emit = defineEmits(['close', 'save'])
 
-const form = reactive({
-  npwp: '',
-  name: '',
-  signatory: '',
-  statusTaxpayer: '',
-  defaultSignatory: false
-});
-
 function close() {
   emit('close')
 }
 
 function onSubmit() {
-  emit('save', { ...form })
+  if (validateForm()) {
+    emit('save', { ...form })
+  }
 }
 </script>
