@@ -72,7 +72,7 @@
 <script setup lang="ts">
 import { defineEmits, defineProps, watch } from 'vue'
 import { useForm } from '../../composables/useForm';
-import { npwpNumberOnly } from '../../helper/formatter';
+import { formatNPWPInput, npwpNumberOnly } from '../../helper/formatter';
 import { TSigner } from '../../composables/useSigners';
 
 const { form, errors, validateForm, onNPWPInput } = useForm();
@@ -105,7 +105,7 @@ watch(() => props.data, (newData) => {
   
   const { name, npwp, signatory, statusTaxpayer, defaultSignatory } = newData;
 
-  form.npwp = npwp;
+  form.npwp = formatNPWPInput(npwp);
   form.name = name;
   form.signatory = signatory;
   form.statusTaxpayer = statusTaxpayer;
