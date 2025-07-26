@@ -28,7 +28,8 @@ export const useForm = () => {
   }
 
   const onNPWPInput = (event: any) => {
-    const input = event.target
+    const input = event.target;
+
     const formatted = formatNPWPInput(input.value)
     input.value = formatted
     form.npwp = formatted

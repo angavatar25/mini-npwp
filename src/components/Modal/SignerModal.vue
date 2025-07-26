@@ -7,7 +7,13 @@
       <div>
         <div class="mb-4">
           <label class="block text-sm font-medium mb-1">NPWP *</label>
-          <input v-model="form.npwp" type="text" class="w-full border rounded px-3 py-2" required />
+          <input
+            v-model="form.npwp"
+            @input="onNPWPInput"
+            type="text"
+            class="w-full border rounded px-3 py-2"
+            required
+          />
           <p v-if="errors.npwp" class="text-red-500 text-sm">{{ errors.npwp }}</p>
         </div>
 
@@ -66,8 +72,9 @@
 <script setup lang="ts">
 import { defineEmits, defineProps, watch } from 'vue'
 import { useForm } from '../../composables/useForm';
+import { npwpNumberOnly } from '../../helper/formatter';
 
-const { form, errors, validateForm } = useForm();
+const { form, errors, validateForm, onNPWPInput } = useForm();
 
 interface DataProps {
   name: string
@@ -91,7 +98,12 @@ function close() {
 
 function onSubmit() {
   if (validateForm()) {
-    emit('save', { ...form })
+    const formUpdated = {
+      ...form,
+      npwp: npwpNumberOnly(form.npwp),
+    }
+
+    emit('save', { ...formUpdated })
     close()
   }
 }

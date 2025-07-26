@@ -82,6 +82,7 @@
 <script setup lang="ts">
 import { defineEmits, defineProps } from 'vue'
 import { useForm } from '../../composables/useForm';
+import { npwpNumberOnly } from '../../helper/formatter';
 
 const { form, errors, validateForm, onNPWPInput } = useForm();
 
@@ -97,7 +98,11 @@ function close() {
 
 function onSubmit() {
   if (validateForm()) {
-    emit('save', { ...form })
+    const formUpdated = {
+      ...form,
+      npwp: npwpNumberOnly(form.npwp),
+    }
+    emit('save', { ...formUpdated })
   }
 }
 </script>

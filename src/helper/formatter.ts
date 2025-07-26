@@ -20,3 +20,9 @@ export function formatNPWPInput(value: any) {
 
   return formatted;
 }
+
+export const npwpNumberOnly = (value: string) => {
+  const numbersOnly = value.replace(/\D/g, '');
+
+  return numbersOnly;
+}
